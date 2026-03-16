@@ -1,0 +1,111 @@
+{% extends 'tracker/base.html' %}
+{% block title %}My Records – StudyTrack{% endblock %}
+
+{% block content %}
+
+<!-- Summary stats bar -->
+<div class="stats-bar mb-4" aria-label="Study summary">
+  <div class="row text-center g-2">
+    <div class="col-6 col-md-3">
+      <div class="stat-value" id="stat-count">{{ records|length }}</div>
+      <div class="stat-label">Sessions</div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-value" id="stat-total-mins">{{ total_mins_display }}</div>
+      <div class="stat-label">Total Time</div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-value">{{ this_week_count }}</div>
+      <div class="stat-label">This Week</div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-value">{{ top_type|default:"–" }}</div>
+      <div class="stat-label">Top Type</div>
+    </div>
+  </div>
+</div>
+
+<!-- Page header -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">My Study Records</h1>
+  <a href="{% url 'record_create' %}" class="btn btn-primary">+ New Record</a>
+</div>
+
+<!-- Filter bar -->
+<div id="filter-bar" class="mb-4" role="search" aria-label="Filter records">
+  <div class="row g-2 align-items-end">
+    <div class="col-sm-4">
+      <label for="filter-type" class="form-label small fw-semibold mb-1">Study Type</label>
+      <select id="filter-type" class="form-select form-select-sm" aria-label="Filter by study type">
+        <option value="">All types</option>
+        <option value="lecture">Lecture</option>
+        <option value="reading">Reading</option>
+        <option value="revision">Revision</option>
+        <option value="practice">Practice</option>
+      </select>
+    </div>
+    <div class="col-sm-4">
+      <label for="filter-date" class="form-label small fw-semibold mb-1">Date</label>
+      <input type="date" id="filter-date" class="form-control form-control-sm" aria-label="Filter by date">
+    </div>
+    <div class="col-sm-4">
+      <button id="filter-clear" class="btn btn-outline-secondary btn-sm w-100">Clear Filters</button>
+    </div>
+  </div>
+</div>
+
+{% if records %}
+
+<!-- Grouped by month -->
+{% for month, month_records in grouped_reco.items %}
+<h5 class="text-muted mt-4 mb-2">{{ month }}</h5>
+<div class="row g-3">
+  {% for record in month_records %}
+  <div class="col-md-6 record-card-wrapper"
+       data-type="{{ record.study_type }}"
+       data-date="{{ record.study_date|date:'Y-m-d' }}"
+       data-duration="{{ record.duration_mins }}">
+    <article class="card record-card shadow-sm h-100" aria-label="Study record: {{ record.title }}">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+          <h2 class="card-title h6 mb-0">{{ record.title }}</h2>
+          <span class="badge bg-primary rounded-pill flex-shrink-0">
+            {{ record.get_study_type_display }}
+          </span>
+        </div>
+        <p class="text-muted small mb-2">
+          <time datetime="{{ record.study_date|date:'Y-m-d' }}">{{ record.study_date }}</time>
+          &nbsp;{{ record.duration_mins }} mins
+          {% if record.course %}
+          &nbsp; {{ record.course.name }}
+          {% endif %}
+        </p>
+        {% if record.reflection_note %}
+        <p class="card-text small text-secondary mb-0">{{ record.reflection_note }}</p>
+        {% endif %}
+      </div>
+      <div class="card-footer bg-transparent d-flex gap-2">
+        <a href="{% url 'record_edit' record.pk %}" class="btn btn-outline-secondary btn-sm"
+           aria-label="Edit record: {{ record.title }}">Edit</a>
+        <button class="btn btn-outline-danger btn-sm btn-ajax-delete"
+                data-url="{% url 'record_delete' record.pk %}"
+                aria-label="Delete record: {{ record.title }}">Delete</button>
+      </div>
+    </article>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+
+<div id="empty-filter-msg" class="empty-state text-center" style="display:none;" role="status">
+  <p class="fs-5">No records match the current filter.</p>
+</div>
+
+{% else %}
+<div class="empty-state text-center" role="status">
+  <p class="fs-5">No records yet.</p>
+  <a href="{% url 'record_create' %}" class="btn btn-primary">Add your first record</a>
+</div>
+{% endif %}
+
+{% endblock %}
