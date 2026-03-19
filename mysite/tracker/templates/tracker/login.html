@@ -9,6 +9,12 @@
         <h1 class="card-title text-center h3 mb-1">StudyTrack</h1>
         <p class="text-center text-muted mb-4">Sign in to your account</p>
 
+        {% if request.GET.registered %}
+          <div class="alert alert-success" role="alert">
+            Account created successfully. Please log in.
+          </div>
+        {% endif %}
+
         {% if error %}
         <div class="alert alert-danger" role="alert" id="login-error">{{ error }}</div>
         {% endif %}

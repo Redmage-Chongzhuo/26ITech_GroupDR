@@ -1,0 +1,66 @@
+{% extends 'tracker/base.html' %}
+{% block title %}My Goals – StudyTrack{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">My Goals</h1>
+</div>
+
+{% if courses_with_goals %}
+  {% for course, goals in courses_with_goals %}
+  <div class="mb-5">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+      <div class="d-flex align-items-center gap-2">
+        <span class="goal-course-dot"></span>
+        <h2 class="h5 mb-0">
+          <a href="{% url 'course_detail' course.pk %}" class="text-decoration-none text-dark">{{ course.name }}</a>
+        </h2>
+      </div>
+      <a href="{% url 'goal_create' course.pk %}" class="btn btn-outline-primary btn-sm">+ Add Goal</a>
+    </div>
+
+    {% if goals %}
+    <div class="row g-3 ms-1">
+      {% for goal in goals %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm h-100 goal-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+              <h3 class="h6 mb-0">{{ goal.title }}</h3>
+              <span class="badge flex-shrink-0
+                {% if goal.status == 'completed' %}bg-success
+                {% elif goal.status == 'paused' %}bg-warning text-dark
+                {% else %}bg-primary{% endif %}">
+                {{ goal.get_status_display }}
+              </span>
+            </div>
+            {% if goal.target_date %}
+            <p class="text-muted small mb-0">
+              Target: <time datetime="{{ goal.target_date|date:'Y-m-d' }}">{{ goal.target_date }}</time>
+            </p>
+            {% endif %}
+          </div>
+          <div class="card-footer bg-transparent d-flex gap-2">
+            <a href="{% url 'goal_edit' goal.pk %}" class="btn btn-outline-secondary btn-sm">Edit</a>
+            <a href="{% url 'goal_delete' goal.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted small ms-1">No goals yet. <a href="{% url 'goal_create' course.pk %}">Add one</a></p>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+{% else %}
+<div class="empty-state text-center" role="status">
+  <p class="fs-5 text-muted">No goals yet.</p>
+  <p class="text-muted small">Create a course first, then add goals to it.</p>
+  <a href="{% url 'course_list' %}" class="btn btn-primary">Go to Courses</a>
+</div>
+{% endif %}
+
+{% endblock %}
