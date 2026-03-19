@@ -1,6 +1,45 @@
-/* StudyTrack - Main Stylesheet */
 
-/* Skip link for keyboard accessibility */
+.bg-primary {
+  background-color: #6f42c1 !important;
+}
+.btn-primary {
+  background-color: #6f42c1 !important;
+  border-color: #6f42c1 !important;
+}
+.btn-primary:hover {
+  background-color: #5a32a3 !important;
+  border-color: #5a32a3 !important;
+}
+.btn-outline-primary {
+  color: #6f42c1 !important;
+  border-color: #6f42c1 !important;
+}
+.btn-outline-primary:hover {
+  background-color: #6f42c1 !important;
+  color: #fff !important;
+}
+.badge.bg-primary {
+  background-color: #6f42c1 !important;
+}
+.navbar.bg-primary {
+  background-color: #6f42c1 !important;
+}
+.stats-bar {
+  background: linear-gradient(135deg, #6f42c1 0%, #4b0082 100%);
+}
+.month-dot, .goal-course-dot {
+  background: linear-gradient(135deg, #6f42c1 0%, #4b0082 100%);
+}
+:focus-visible {
+  outline-color: #6f42c1;
+}
+.skip-link {
+  background: #6f42c1;
+}
+
+
+
+
 .skip-link {
   position: absolute;
   top: -40px;
@@ -17,13 +56,11 @@
   top: 0;
 }
 
-/* Focus styles for keyboard navigation */
 :focus-visible {
   outline: 3px solid #0d6efd;
   outline-offset: 2px;
 }
 
-/* Card hover effect */
 .record-card {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   border: 1px solid #dee2e6;
@@ -33,9 +70,8 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10) !important;
 }
 
-/* Summary stats bar */
 .stats-bar {
-  background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+  background: linear-gradient(135deg, #6f42c1 0%, #4b0082 100%);
   color: #fff;
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
@@ -52,7 +88,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Filter bar */
 #filter-bar {
   background: #fff;
   border: 1px solid #dee2e6;
@@ -60,28 +95,101 @@
   padding: 1rem 1.25rem;
 }
 
-/* Empty state */
 .empty-state {
   padding: 3rem 1rem;
   color: #6c757d;
 }
 
-/* Inline field error */
 .field-error {
   font-size: 0.85rem;
   color: #dc3545;
   margin-top: 0.25rem;
 }
 
-/* Delete card top border */
 .delete-card {
   border-top: 4px solid #dc3545;
 }
 
-/* Toast notification */
 .toast-container {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
   z-index: 1100;
 }
+
+.month-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Mobile*/
+@media (max-width: 767px) {
+  .month-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.month-column {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  padding: 1rem 1rem 0.5rem;
+  break-inside: avoid;
+}
+
+.month-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.month-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+  flex-shrink: 0;
+}
+
+.month-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #212529;
+}
+
+.month-waterfall {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-left: 2px solid #dee2e6;
+  padding-left: 0.75rem;
+  margin-left: 4px;
+}
+
+.goal-card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid #dee2e6 !important;
+}
+.goal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10) !important;
+}
+.goal-course-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+}
+
+.hero-title-link {
+    text-decoration: none;
+    display: inline-block; 
+    }
