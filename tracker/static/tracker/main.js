@@ -1,8 +1,6 @@
-/* StudyTrack - main.js */
-
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* ── 1. CLIENT-SIDE FILTER ──
+  /*CLIENT-SIDE FILTER
      Filters cards by study type and date
      without a full page reload (S1 requirement) */
   const filterType = document.getElementById('filter-type');
@@ -12,37 +10,37 @@ document.addEventListener('DOMContentLoaded', function () {
   const emptyMessage = document.getElementById('empty-filter-msg');
 
   function applyFilters() {
-    if (!filterType) return;
+  if (!filterType) return;
 
-    const selectedType = filterType.value;
-    const selectedDate = filterDate ? filterDate.value : '';
-    let visibleCount = 0;
+  const selectedType = filterType.value;
+  const selectedDate = filterDate ? filterDate.value : '';
+  let visibleCount = 0;
+  
+  document.querySelectorAll('.record-item').forEach(function (card) {
+    const cardType = card.dataset.type || '';
+    const cardDate = card.dataset.date || '';
 
-    recordCards.forEach(function (wrapper) {
-      const cardType = wrapper.dataset.type || '';
-      const cardDate = wrapper.dataset.date || '';
+    const typeMatch = !selectedType || cardType === selectedType;
+    const dateMatch = !selectedDate || cardDate === selectedDate;
 
-      const typeMatch = !selectedType || cardType === selectedType;
-      const dateMatch = !selectedDate || cardDate === selectedDate;
-
-      if (typeMatch && dateMatch) {
-        wrapper.style.display = '';
-        visibleCount++;
-      } else {
-        wrapper.style.display = 'none';
-      }
-    });
-
-    if (emptyMessage) {
-      emptyMessage.style.display = visibleCount === 0 ? 'block' : 'none';
+    if (typeMatch && dateMatch) {
+      card.style.display = '';
+      visibleCount++;
+    } else {
+      card.style.display = 'none';
     }
+  });
 
-    announceToScreenReader(
-      visibleCount === 0
-        ? 'No records match the current filter.'
-        : visibleCount + ' record' + (visibleCount > 1 ? 's' : '') + ' shown.'
-    );
+  if (emptyMessage) {
+    emptyMessage.style.display = visibleCount === 0 ? 'block' : 'none';
   }
+
+  announceToScreenReader(
+    visibleCount === 0
+      ? 'No records match the current filter.'
+      : visibleCount + ' record' + (visibleCount > 1 ? 's' : '') + ' shown.'
+  );
+}
 
   if (filterType) filterType.addEventListener('change', applyFilters);
   if (filterDate) filterDate.addEventListener('change', applyFilters);
@@ -55,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-  /* ── 2. AJAX DELETE ──
+  /*AJAX DELETE
      Deletes a record without page reload */
   document.querySelectorAll('.btn-ajax-delete').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
@@ -94,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
-  /* ── 3. FORM ENHANCEMENTS ──
+  /*FORM ENHANCEMENTS
      Character counter for reflection note */
   const reflectionField = document.getElementById('id_reflection_note');
   const charCounter = document.getElementById('reflection-counter');
@@ -106,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
     updateCounter();
   }
 
-  // Prevent double submit
   document.querySelectorAll('form').forEach(function (form) {
     form.addEventListener('submit', function () {
       const btn = form.querySelector('[type=submit]');
@@ -118,9 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
-  /* ── 4. ACCESSIBILITY HELPERS ── */
+  /*ACCESSIBILITY HELPERS*/
 
-  // Live region for screen readers
   const liveRegion = document.getElementById('sr-live-region');
   function announceToScreenReader(msg) {
     if (!liveRegion) return;
@@ -128,7 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () { liveRegion.textContent = msg; }, 50);
   }
 
-  // Toast notification
   function showToast(message, type) {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -147,7 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
     toastEl.addEventListener('hidden.bs.toast', function () { toastEl.remove(); });
   }
 
-  // CSRF cookie helper
   function getCookie(name) {
     let value = null;
     document.cookie.split(';').forEach(function (c) {
