@@ -1,0 +1,76 @@
+{% extends 'tracker/base.html' %}
+{% block title %}{{ course.name }} – StudyTrack{% endblock %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'course_list' %}">Courses</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ course.name }}</li>
+  </ol>
+</nav>
+
+<div class="d-flex justify-content-between align-items-start mb-4">
+  <div>
+    <h1 class="h3 mb-1">{{ course.name }}</h1>
+    {% if course.description %}
+    <p class="text-muted mb-0">{{ course.description }}</p>
+    {% endif %}
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'goal_create' course.pk %}" class="btn btn-outline-primary btn-sm">+ Add Goal</a>
+    <a href="{% url 'course_edit' course.pk %}" class="btn btn-outline-secondary btn-sm">Edit Course</a>
+  </div>
+</div>
+
+<div class="stats-bar mb-4" aria-label="Course summary">
+  <div class="row text-center g-2">
+    <div class="col-6 col-md-4">
+      <div class="stat-value">{{ records|length }}</div>
+      <div class="stat-label">Sessions</div>
+    </div>
+    <div class="col-6 col-md-4">
+      <div class="stat-value">{{ total_mins_display }}</div>
+      <div class="stat-label">Total Time</div>
+    </div>
+    <div class="col-6 col-md-4">
+      <div class="stat-value">{{ this_week_count }}</div>
+      <div class="stat-label">This Week</div>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h5 mb-0">Study Sessions</h2>
+  <a href="{% url 'record_create' %}" class="btn btn-outline-primary btn-sm">+ Add Session</a>
+</div>
+
+{% if records %}
+<div class="d-flex flex-column gap-2">
+  {% for record in records %}
+  <div class="card border-0 shadow-sm">
+    <div class="card-body py-2 px-3">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <p class="mb-0 fw-semibold">{{ record.title }}</p>
+          <p class="mb-0 text-muted small">
+            <time datetime="{{ record.study_date|date:'Y-m-d' }}">{{ record.study_date }}</time>
+            · {{ record.duration_mins }} mins · {{ record.get_study_type_display }}
+          </p>
+        </div>
+        <div class="d-flex gap-1 ms-2 flex-shrink-0">
+          <a href="{% url 'record_edit' record.pk %}" class="btn btn-outline-secondary btn-sm" style="font-size:0.75rem;">Edit</a>
+          <button class="btn btn-outline-danger btn-sm btn-ajax-delete"
+                  data-url="{% url 'record_delete' record.pk %}"
+                  style="font-size:0.75rem;">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-muted small">No sessions yet for this course.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'tracker/base.html' %}
+{% block title %}My Courses – StudyTrack{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 mb-0">My Courses</h1>
+  <a href="{% url 'course_create' %}" class="btn btn-primary">+ New Course</a>
+</div>
+
+{% if courses %}
+<div class="row g-3">
+  {% for course in courses %}
+  <div class="col-md-6">
+    <article class="card shadow-sm h-100 record-card" aria-label="Course: {{ course.name }}">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <h2 class="h5 mb-0">
+            <a href="{% url 'course_detail' course.pk %}" class="text-decoration-none text-dark">
+              {{ course.name }}
+            </a>
+          </h2>
+          <span class="badge bg-secondary">{{ course.records.count }} session{{ course.records.count|pluralize }}</span>
+        </div>
+        {% if course.description %}
+        <p class="text-muted small mb-2">{{ course.description }}</p>
+        {% endif %}
+        <p class="small mb-0">
+          <strong>{{ course.total_mins }}</strong> mins total &nbsp;
+          <strong>{{ course.goals.count }}</strong> goal{{ course.goals.count|pluralize }}
+        </p>
+      </div>
+      <div class="card-footer bg-transparent d-flex gap-2">
+        <a href="{% url 'course_detail' course.pk %}" class="btn btn-outline-primary btn-sm">View</a>
+        <a href="{% url 'course_edit' course.pk %}" class="btn btn-outline-secondary btn-sm">Edit</a>
+        <a href="{% url 'course_delete' course.pk %}" class="btn btn-outline-danger btn-sm">Delete</a>
+      </div>
+    </article>
+  </div>
+  {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-state text-center" role="status">
+  <p class="fs-5">No courses yet.</p>
+  <a href="{% url 'course_create' %}" class="btn btn-primary">Add your first course</a>
+</div>
+{% endif %}
+{% endblock %}

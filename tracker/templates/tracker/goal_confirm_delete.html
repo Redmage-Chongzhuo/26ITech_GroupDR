@@ -1,0 +1,24 @@
+{% extends 'tracker/base.html' %}
+{% block title %}Delete Goal – StudyTrack{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <div class="card shadow-sm delete-card">
+      <div class="card-body p-4 text-center">
+        <h1 class="h4 text-danger mb-3">Delete Goal?</h1>
+        <p class="mb-1">You are about to permanently delete:</p>
+        <p class="fw-bold fs-5">{{ goal.title }}</p>
+        <p class="text-muted small">{{ goal.course.name }}</p>
+
+        <form method="post" class="d-flex justify-content-center gap-3 mt-4">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Yes, Delete</button>
+          <a href="{% url 'course_detail' goal.course.pk %}" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+        <p class="text-muted small mt-3">This action cannot be undone.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

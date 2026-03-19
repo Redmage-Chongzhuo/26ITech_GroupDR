@@ -1,0 +1,59 @@
+{% extends 'tracker/base.html' %}
+{% block title %}{{ action }} Record – StudyTrack{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <nav aria-label="breadcrumb" class="mb-3">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'record_list' %}">My Records</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ action }} Record</li>
+      </ol>
+    </nav>
+
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-4">{{ action }} Study Record</h1>
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+              {{ field.label }}
+              {% if field.field.required %}
+              <span class="text-danger" aria-hidden="true"> *</span>
+              {% endif %}
+            </label>
+            {% if field.name == 'reflection_note' %}
+              {{ field }}
+              <div class="d-flex justify-content-between mt-1">
+                <span id="reflection-counter" class="text-muted small" aria-live="polite">0 characters</span>
+                <span class="text-muted small">Optional</span>
+              </div>
+            {% else %}
+              {{ field }}
+            {% endif %}
+            {% if field.errors %}
+            <div class="field-error" role="alert">
+              {% for error in field.errors %}{{ error }}{% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+
+          {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+          {% endif %}
+
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">Save Record</button>
+            <a href="{% url 'record_list' %}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

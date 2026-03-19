@@ -1,0 +1,52 @@
+{% extends 'tracker/base.html' %}
+{% block title %}Login – StudyTrack{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="card-title text-center h3 mb-1">StudyTrack</h1>
+        <p class="text-center text-muted mb-4">Sign in to your account</p>
+
+        {% if request.GET.registered %}
+          <div class="alert alert-success" role="alert">
+            Account created successfully. Please log in.
+          </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="alert alert-danger" role="alert" id="login-error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" novalidate aria-label="Login form">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_username" class="form-label fw-semibold">
+              Username <span class="text-danger" aria-hidden="true">*</span>
+            </label>
+            <input type="text" id="id_username" name="username"
+                   class="form-control" required autocomplete="username"
+                   aria-required="true"
+                   {% if error %}aria-describedby="login-error"{% endif %}>
+          </div>
+          <div class="mb-3">
+            <label for="id_password" class="form-label fw-semibold">
+              Password <span class="text-danger" aria-hidden="true">*</span>
+            </label>
+            <input type="password" id="id_password" name="password"
+                   class="form-control" required autocomplete="current-password"
+                   aria-required="true"
+                   {% if error %}aria-describedby="login-error"{% endif %}>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+
+        <p class="text-center mt-3 text-muted mb-0">
+          Don't have an account? <a href="{% url 'register' %}">Register</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
